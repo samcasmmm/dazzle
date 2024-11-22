@@ -11,18 +11,66 @@ import {
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Copy, RefreshCw } from 'lucide-react';
+import { Check, Copy, Navigation, RefreshCw } from 'lucide-react';
 import { useOrigin } from '@/hooks/use-origin';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { string } from 'zod';
+import axios from 'axios';
 
 type Props = {};
 
 export const InviteModal = (props: Props) => {
-  const { isOpen, type, onClose } = useModal();
+  const { isOpen, type, onClose, onOpen, data } = useModal();
   const origin = useOrigin();
 
   const isModalOpen = isOpen && type === 'invite';
 
-  const inviteUrl = `${origin}`;
+  const { server } = data;
+
+  const inviteUrl = `${origin}/invite/${server?.inviteCode}`;
+
+  const [copied, setCopied] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onCopy = () => {
+    navigator.clipboard.writeText(inviteUrl);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 1000);
+  };
+
+  const onNew = async () => {
+    try {
+      setIsLoading(true);
+      const res = await axios.patch(`/api/servers/${server?.id}/invite-code`);
+      onOpen('invite', { server: res.data });
+      toast.success('Generated new invite link');
+    } catch (error) {
+      console.log(error);
+      toast.error(String(error));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const CopyTextComponent = () => {
+    return (
+      <Button
+        size={'icon'}
+        className='dark:bg-black'
+        onClick={onCopy}
+        disabled={isLoading}
+      >
+        {copied ? (
+          <Check className='w-4 h-4 dark:text-emerald-600 text-emerald-600' />
+        ) : (
+          <Copy className='w-4 h-4 dark:text-white' />
+        )}
+      </Button>
+    );
+  };
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
@@ -39,16 +87,17 @@ export const InviteModal = (props: Props) => {
           <div className='flex items-center mt-2 gap-x-2'>
             <Input
               className='bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0 dark:text-white selection:bg-blue-600'
-              value='invite-link'
+              value={inviteUrl}
+              disabled={isLoading}
             />
-            <Button size={'icon'} className='dark:bg-black'>
-              <Copy className='w-4 h-4 dark:text-white ' />
-            </Button>
+            <CopyTextComponent />
           </div>
           <Button
             variant={'link'}
             size={'sm'}
             className='text-xs text-zinc-500 mt-4 dark:text-white '
+            disabled={isLoading}
+            onClick={onNew}
           >
             Generate a new link
             <RefreshCw className='w-4 h-4 ml-2' />
