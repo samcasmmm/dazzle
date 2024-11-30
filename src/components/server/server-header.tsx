@@ -84,7 +84,10 @@ export const ServerHeader = (props: Props) => {
           </DropdownMenuItem>
         )}
         {!isAdmin && (
-          <DropdownMenuItem className='px-3 text-sm cursor-pointer text-rose-500'>
+          <DropdownMenuItem
+            className='px-3 text-sm cursor-pointer text-rose-500'
+            onClick={() => onOpen('leaveServer', { server: props.server })}
+          >
             Leave Server
             <LogOut className='h-4 w-4 ml-auto' />
           </DropdownMenuItem>
