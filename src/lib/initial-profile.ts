@@ -9,7 +9,7 @@ export const initialProfile = async () => {
     return (await auth()).redirectToSignIn;
   }
 
-  const profile = await db.profile.findMany({
+  const profile = await db.profile.findFirst({
     where: { userId: user.id },
   });
 

@@ -50,19 +50,28 @@ export const ServerHeader = (props: Props) => {
           </DropdownMenuItem>
         )}
         {isAdmin && (
-          <DropdownMenuItem className='px-3 text-sm cursor-pointer'>
+          <DropdownMenuItem
+            className='px-3 text-sm cursor-pointer'
+            onClick={() => onOpen('editServer', { server: props.server })}
+          >
             Server Setting
             <Settings className='h-4 w-4 ml-auto' />
           </DropdownMenuItem>
         )}
         {isAdmin && (
-          <DropdownMenuItem className='px-3 text-sm cursor-pointer'>
+          <DropdownMenuItem
+            className='px-3 text-sm cursor-pointer'
+            onClick={() => onOpen('members', { server: props.server })}
+          >
             Manage Members
             <Users className='h-4 w-4 ml-auto' />
           </DropdownMenuItem>
         )}
         {isModerator && (
-          <DropdownMenuItem className='px-3 text-sm cursor-pointer'>
+          <DropdownMenuItem
+            className='px-3 text-sm cursor-pointer'
+            onClick={() => onOpen('createChannel', { server: props.server })}
+          >
             Create Channel
             <PlusCircle className='h-4 w-4 ml-auto' />
           </DropdownMenuItem>

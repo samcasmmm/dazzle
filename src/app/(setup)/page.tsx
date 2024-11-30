@@ -1,8 +1,9 @@
-import { InitailModal } from '@/components/modals/initial-modal';
-import { db } from '@/lib/db';
-import { initialProfile } from '@/lib/initial-profile';
-import { redirect } from 'next/navigation';
 import React from 'react';
+import { db } from '@/lib/db';
+import { redirect } from 'next/navigation';
+
+import { initialProfile } from '@/lib/initial-profile';
+import { InitailModal } from '@/components/modals/initial-modal';
 
 type Props = {};
 
@@ -12,7 +13,7 @@ const SetupPage = async (props: Props) => {
     where: {
       members: {
         some: {
-          profileId: profile.id,
+          profileId: profile?.id,
         },
       },
     },
