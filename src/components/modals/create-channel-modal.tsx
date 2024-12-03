@@ -1,3 +1,4 @@
+'use client';
 import axios from 'axios';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
@@ -34,6 +35,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useEffect } from 'react';
 
 type Props = {};
 
@@ -52,17 +54,26 @@ const formSchema = z.object({
 export const CreateChannelModal = (props: Props) => {
   const router = useRouter();
   const params = useParams();
-  const { isOpen, type, onClose } = useModal();
+  const { isOpen, type, onClose, onOpen, data } = useModal();
 
   const isModalOpen = isOpen && type === 'createChannel';
+  const { channelType } = data;
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      type: ChannelType.TEXT,
+      type: channelType || ChannelType.TEXT,
     },
   });
+
+  useEffect(() => {
+    if (channelType) {
+      form.setValue('type', channelType);
+    } else {
+      form.setValue('type', ChannelType.TEXT);
+    }
+  }, [channelType, form]);
 
   const isLoading = form.formState.isSubmitting;
 
