@@ -51,41 +51,39 @@ const formSchema = z.object({
   type: z.nativeEnum(ChannelType),
 });
 
-export const CreateChannelModal = (props: Props) => {
+export const EditChannelModal = (props: Props) => {
   const router = useRouter();
-  const params = useParams();
   const { isOpen, type, onClose, onOpen, data } = useModal();
 
-  const isModalOpen = isOpen && type === 'createChannel';
-  const { channelType } = data;
+  const isModalOpen = isOpen && type === 'editChannel';
+  const { channel, server } = data;
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      type: channelType || ChannelType.TEXT,
+      type: channel?.type || ChannelType.TEXT,
     },
   });
 
   useEffect(() => {
-    if (channelType) {
-      form.setValue('type', channelType);
-    } else {
-      form.setValue('type', ChannelType.TEXT);
+    if (channel) {
+      form.setValue('name', channel.name);
+      form.setValue('type', channel.type);
     }
-  }, [channelType, form]);
+  }, [form, channel]);
 
   const isLoading = form.formState.isSubmitting;
 
   const onSumbit = async (values: z.infer<typeof formSchema>) => {
     try {
       const url = qs.stringifyUrl({
-        url: '/api/channels',
+        url: `/api/channels/${channel?.id}`,
         query: {
-          serverId: params?.serverId,
+          serverId: server?.id,
         },
       });
-      await axios.post(url, values);
+      await axios.patch(url, values);
       form.reset();
       router.refresh();
       handleOnClose();
@@ -104,7 +102,7 @@ export const CreateChannelModal = (props: Props) => {
       <DialogContent className='bg-white dark:bg-neutral-900 text-black p-0 overflow-hidden border-2 dark:border-gray-800'>
         <DialogHeader className='pt-8 px-6'>
           <DialogTitle className='text-2xl text-center font-bold dark:text-white'>
-            Create Channel
+            Edit Channel
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -167,7 +165,7 @@ export const CreateChannelModal = (props: Props) => {
             </div>
             <DialogFooter className='bg-gray-100 px-6 py-4 dark:bg-neutral-900'>
               <Button disabled={isLoading} variant={'primary'}>
-                Create
+                Update
               </Button>
             </DialogFooter>
           </form>

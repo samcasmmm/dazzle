@@ -42,7 +42,7 @@ export const CreateServerModal = (props: Props) => {
   const router = useRouter();
   const { isOpen, type, onClose } = useModal();
 
-  const isModalOpen = isOpen && type === 'createserver';
+  const isModalOpen = isOpen && type === 'createServer';
 
   const form = useForm({
     resolver: zodResolver(formSchema),
