@@ -15,7 +15,7 @@ import { NavigationItem } from '@/components/navigation/navigation-item';
 
 type Props = {};
 
-const NavigationSideBar = async (props: Props) => {
+export const NavigationSidebar = async (props: Props) => {
   const profile = await currentProfile();
 
   if (!profile) {
@@ -55,5 +55,3 @@ const NavigationSideBar = async (props: Props) => {
     </div>
   );
 };
-
-export default NavigationSideBar;
