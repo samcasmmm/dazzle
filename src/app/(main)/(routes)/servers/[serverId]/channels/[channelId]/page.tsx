@@ -17,8 +17,9 @@ interface Props {
   };
 }
 
-const ChannelIdPage = async ({ params: { channelId, serverId } }: Props) => {
+const ChannelIdPage = async ({ params }: Props) => {
   const profile = await currentProfile();
+  const { channelId, serverId } = await params;
 
   if (!profile) return (await auth()).redirectToSignIn;
 
@@ -33,7 +34,11 @@ const ChannelIdPage = async ({ params: { channelId, serverId } }: Props) => {
   if (!channel || !member) return redirect('/');
   return (
     <div className='bg-white dark:bg-[#313338] flex flex-col h-full'>
-      ChannelIdPage
+      <ChatHeader
+        name={channel.name}
+        serverId={channel.serverId}
+        type='channel'
+      />
     </div>
   );
 };
