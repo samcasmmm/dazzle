@@ -18,6 +18,7 @@ import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useModal } from '@/hooks/use-modal-store';
+import { isCheckImage } from '@/lib/utils';
 
 interface ChatItemProps {
   id: string;
@@ -25,6 +26,7 @@ interface ChatItemProps {
   member: Member & { profile: Profile };
   timestamp: string;
   fileUrl: string | null;
+  fileUrlType: string | null;
   deleted: boolean;
   currentMember: Member;
   isUpdated: boolean;
@@ -48,6 +50,7 @@ export function ChatItem({
   member,
   timestamp,
   fileUrl,
+  fileUrlType,
   deleted,
   currentMember,
   isUpdated,
@@ -114,7 +117,8 @@ export function ChatItem({
   const isOwner = currentMember.id === member.id;
   const canDeleteMessage = !deleted && (isAdmin || isModerator || isOwner);
   const canEditMessage = !deleted && isOwner && !fileUrl;
-  const isPDF = fileType === 'pdf' && fileUrl;
+  const isPDF = fileUrlType === 'pdf' && fileUrl;
+  const isPDF2 = fileType && fileUrl;
   const isImage = !isPDF && fileUrl;
 
   return (
@@ -143,7 +147,7 @@ export function ChatItem({
               {timestamp}
             </span>
           </div>
-          {isImage && (
+          {isImage && fileUrlType !== 'pdf' && (
             <a
               href={fileUrl}
               target='_blank'

@@ -19,10 +19,14 @@ export const ourFileRouter = {
     },
   })
     .middleware(() => handleAuth())
-    .onUploadComplete(() => {}),
+    .onUploadComplete(() => {
+      console.log('Message File Upload Completed.');
+    }),
   messageFile: f(['image', 'pdf', 'image/gif', 'video'])
     .middleware(() => handleAuth())
-    .onUploadComplete(() => {}),
+    .onUploadComplete(() => {
+      console.log('Message File Upload Completed.');
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

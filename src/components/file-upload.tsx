@@ -1,32 +1,60 @@
 'use client';
 
-import { X } from 'lucide-react';
+import React, { useState } from 'react';
+import '@uploadthing/react/styles.css';
+import { FileIcon, X } from 'lucide-react';
 import Image from 'next/image';
 
-import React from 'react';
 import { UploadDropzone } from '@/lib/uploadthing';
-import { FileUploadData, GetFileUrlsOptions } from 'uploadthing/types';
-import { DeleteUploadThingByUrl } from '@/lib/AxiosRequest';
 
-interface Props {
-  endpoint: 'messageFile' | 'serverImage';
-  value: string;
+interface FileUploadProps {
   onChange: (url?: string) => void;
+  getType?: (e?: any) => void;
+  value: string;
+  endpoint: 'messageFile' | 'serverImage';
 }
 
-export const FileUpload = ({ endpoint, value, onChange }: Props) => {
-  const fileType = value?.split('.').pop();
+export function FileUpload({
+  onChange,
+  value,
+  endpoint,
+  getType,
+}: FileUploadProps) {
+  const fileType1 = value.split('.').pop()?.toLowerCase();
+  const [fileType, setFileType] = useState('img');
+
   if (value && fileType !== 'pdf') {
     return (
-      <div className='relative h-20 w-20 '>
-        <Image src={String(value)} alt='Upload' className='rounded-full' fill />
+      <div className='relative h-20 w-20'>
+        <Image fill src={value} alt='Upload' className='rounded-full' />
         <button
-          className='bg-rose-500 text-white p-1 rounded-full absolute top-0 right-0 shadow-sm hover:bg-rose-600 duration-100 ease-linear '
+          onClick={() => onChange('')}
+          className='bg-rose-500 text-white p-1 rounded-full absolute top-0 right-0 shadow-sm'
           type='button'
-          onClick={async () => {
-            await DeleteUploadThingByUrl(value);
-            return onChange();
-          }}
+        >
+          <X className='h-4 w-4' />
+        </button>
+      </div>
+    );
+  }
+
+  if (value && fileType) {
+    return (
+      <div className='relative flex items-center p-2 mt-2 rounded-md bg-[#202020] max-w-lg'>
+        <FileIcon className='h-10 w-10 fill-indigo-200 stroke-indigo-400' />
+        <a
+          href={value}
+          target='_blank'
+          rel='noopener noreferrer'
+          className='ml-2 text-sm text-indigo-500 dark:text-indigo-400 hover:underline break-words max-w-sm'
+        >
+          {value}
+        </a>
+
+        <button
+          onClick={() => onChange('')}
+          className='bg-rose-500 text-white p-1 rounded-full absolute top-[-8px] right-[-8px] shadow-sm'
+          type='button'
         >
           <X className='h-4 w-4' />
         </button>
@@ -37,15 +65,23 @@ export const FileUpload = ({ endpoint, value, onChange }: Props) => {
   return (
     <UploadDropzone
       className='dark:border-neutral-400 dark:text-white'
-      endpoint='serverImage'
+      endpoint={endpoint}
       onClientUploadComplete={(res) => {
-        if (res) {
-          onChange(res[0].url);
+        const uploadedFile = res?.[0];
+        if (uploadedFile) {
+          console.log('Uploaded file:', uploadedFile.name.split('.')[1]);
+          if (getType) {
+            getType(uploadedFile.name.split('.')[1].toLowerCase());
+          }
+          if (uploadedFile.name.split('.')[1] === 'pdf') {
+            setFileType('pdf');
+          }
+          onChange(uploadedFile.url);
         }
       }}
-      onUploadError={(e: Error) => {
-        console.log('onUploadError', e);
-      }}
+      onUploadError={(error: Error) =>
+        console.error('Upload error:', error.message)
+      }
     />
   );
-};
+}

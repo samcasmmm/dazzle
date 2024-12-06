@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import '@livekit/components-styles';
+// import '@livekit/components-styles';
 import { LiveKitRoom, VideoConference } from '@livekit/components-react';
 import { useUser } from '@clerk/nextjs';
 import { Loader2 } from 'lucide-react';

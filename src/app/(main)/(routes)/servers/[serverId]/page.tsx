@@ -15,9 +15,10 @@ export default async function ServerIdPage({ params }: Props) {
   const profile = await currentProfile();
 
   if (!profile) return (await auth()).redirectToSignIn;
+  const { serverId } = await params;
   const server = await db.server.findUnique({
     where: {
-      id: params.serverId,
+      id: serverId,
       members: {
         some: {
           profileId: profile.id,
