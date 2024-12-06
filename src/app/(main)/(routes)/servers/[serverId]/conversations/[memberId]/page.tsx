@@ -21,12 +21,14 @@ interface MemberIdPageProps {
 }
 
 export default async function MemberIdPage({
-  params: { memberId, serverId },
-  searchParams: { video },
+  params,
+  searchParams,
 }: MemberIdPageProps) {
   const profile = await currentProfile();
 
   if (!profile) return (await auth()).redirectToSignIn;
+  const { video } = await searchParams;
+  const { memberId, serverId } = await params;
 
   const currentMember = await db.member.findFirst({
     where: {
