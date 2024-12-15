@@ -1,6 +1,5 @@
 # FullStack Discord Clone: Next.js 13, React, Socket.io, Prisma, Tailwind, MySQL & TypeScript.
 
-Credits: [Antonio Erdeljac](https://github.com/AntonioErdeljac)
 
 Features:
 
@@ -24,64 +23,22 @@ Features:
 - MySQL database using Planetscale
 - Authentication with Clerk
 
-### Prerequisites
+## Some Screenshot
 
-**Node version 18.x.x**
+### Login/Register
+![alt text](image.png)
 
-### Cloning the repository
+### Add server
+![alt text](image-1.png)
 
-```shell
-git clone https://github.com/nayak-nirmalya/discord-clone.git
-```
+### Server Home
+![alt text](image-2.png)
 
-### Install packages
+### Create Channel
+![alt text](image-3.png)
 
-```shell
-npm install
-```
+### Search
+![alt text](image-4.png)
 
-### Setup .env file
-
-```js
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
-CLERK_SECRET_KEY=
-NEXT_PUBLIC_CLERK_SIGN_IN_URL=
-NEXT_PUBLIC_CLERK_SIGN_UP_URL=
-NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=
-NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=
-
-DATABASE_URL=
-
-UPLOADTHING_SECRET=
-UPLOADTHING_APP_ID=
-
-LIVEKIT_API_KEY=
-LIVEKIT_API_SECRET=
-NEXT_PUBLIC_LIVEKIT_URL=
-```
-
-### Setup Prisma
-
-Add MySQL Database (PlanetScale)
-
-```shell
-npx prisma generate
-npx prisma db push
-```
-
-### Start the app
-
-```shell
-npm run dev
-```
-
-## Available commands
-
-Running commands with npm `npm run [command]`
-
-| command | description                              |
-| :------ | :--------------------------------------- |
-| `dev`   | Starts a development instance of the app |
-| `lint`  | Run lint check                           |
-| `build` | Start building app for deployment        |
-| `start` | Run build version of app                 |
+### Manage member
+![alt text](image-5.png)
